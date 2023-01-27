@@ -1,0 +1,25 @@
+{
+    "config": {
+        "vendor-dir": "moduulit"
+    },
+    "name": "savoksi/ydin",
+    "description": "Minimaalinen PHP-ohjelman runko",
+    "type": "libary",
+    "license": "MIT",
+    "version": "1.0",
+    "authors": [
+        {
+            "name": "Toni Rönkkö",
+            "email": "tronkko73@gmail.com"
+        }
+    ],
+    "autoload": {
+        "classmap": [
+            "luokat/",
+            "komennot/"
+        ],
+        "files": [
+            "funktiot.php"
+        ]
+    }
+}

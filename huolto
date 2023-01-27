@@ -1,0 +1,28 @@
+#!/usr/bin/env php
+<?php
+/*
+ * Tämä tiedosto käynnistää huoltokomennon.
+ *
+ * Käynnistä haluamasi huoltokomento komentoriviltä esimerkiksi komennolla
+ *
+ *     php huolto komento [vivut] ...
+ */
+namespace Savoksi;
+
+use Exception;
+
+// Alusta moduulit
+require_once __DIR__ . '/vendor/autoload.php';
+
+// Suorita komento
+try {
+    if ($argc < 2) {
+        virhe('Käyttö: php huolto komento [vivut]');
+    }
+    $komento = Komento::luo($argv[1]);
+    $komento->suorita(array_slice($argv, 2));
+} catch (Exception $e) {
+    // Tulosta virheilmoitus ruudulle ja lopeta
+    fprintf(STDERR, "%s\n", $e->getMessage());
+    exit(3);
+}
