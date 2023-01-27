@@ -3,7 +3,7 @@
         "vendor-dir": "moduulit"
     },
     "name": "savoksi/ydin",
-    "description": "Minimaalinen PHP-ohjelman runko",
+    "description": "Savoksi-kehitysympäristö",
     "type": "libary",
     "license": "MIT",
     "version": "1.0",

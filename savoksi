@@ -1,0 +1,60 @@
+#!/usr/bin/env php
+<?php
+/*
+ * Tämä tiedosto käynnistää huoltokomennon.
+ *
+ * Käynnistä haluamasi huoltokomento komentoriviltä esimerkiksi komennolla
+ *
+ *     php huolto komento [vivut] ...
+ */
+namespace Savoksi;
+
+use Exception;
+
+// Lataa ja asenna composer
+if (!file_exists('composer')) {
+    $versio = 'https://getcomposer.org/download/2.5.1/composer.phar';
+    $tarkiste = 'f1b94fee11a5bd6a1aae5d77c8da269df27c705fcc806ebf4c8c2e6fa8645c20';
+
+    // Lataa composer verkosta muistiin
+    echo "Ladataan composer $versio\n";
+    $composer = file_get_contents($versio);
+
+    // Varmista, että ladattu tiedosto on ehjä
+    if (hash('sha256', $composer) != $tarkiste) {
+        fprintf(STDERR, "Virheellinen tarkiste\n");
+        exit(3);
+    }
+
+    // Tallenna composer tiedostoon
+    if (!file_put_contents('composer', $composer)) {
+        fprintf(STDERR, "Ei voi kirjoittaa työhakemistoon\n");
+        exit(3);
+    }
+
+    // Aseta ajo-oikeus (Linux)
+    chmod('composer', 0755);
+
+    // Asenna projektin vaatimat moduulit composerilla
+    fprintf(STDERR, "Asennetaan moduulit\n");
+    system('php composer install', $virhekoodi);
+    if ($virhekoodi != 0) {
+        exit(3);
+    }
+}
+
+// Alusta moduulit
+require_once __DIR__ . '/moduulit/autoload.php';
+
+// Suorita huoltokomento
+try {
+    if ($argc < 2) {
+        virhe('Käyttö: php huolto komento [vivut]');
+    }
+    $komento = Komento::luo($argv[1]);
+    $komento->suorita(array_slice($argv, 2));
+} catch (Exception $e) {
+    // Tulosta virheilmoitus ruudulle ja lopeta
+    fprintf(STDERR, "%s\n", $e->getMessage());
+    exit(3);
+}
